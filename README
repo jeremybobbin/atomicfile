@@ -1,0 +1,28 @@
+### life is good
+
+if context is canceled before `Close` is called,
+uh
+
+---
+
+This is pretty cool bc standard library cancels request context when an HTTP client closes the socket
+makes it less boring
+
+I like using contexts & it seems like the creators hit the nail on the
+head by including it in the standard library(except Rob Pike).
+
+Also, note that `defer` calls it's parameter asyncronously after the function returns,
+so
+
+```go
+http.GET("/path", func(...) {
+	f, _ := atomicfile.New(r.Context(), "abc.xyz")
+	defer f.Close()
+	f.Write(...)
+})
+```
+
+
+It could be that the request context cancels before `f.Close()` is called
+meaning that your thing got deleted, but if you have a bunch of garbage
+middleware for logging & stuff then you're probably fine
